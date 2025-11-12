@@ -31,4 +31,7 @@ const userSchema = new Schema({
 
 }, {timestamps: true})
 
-export const User = mongoose.model('User', userSchema)
+
+// Next js runs on edge i.e (it uses edge compiuting) so it hot reloads the code on every change
+// So to avoid overwriting the model we check if the model already exists or not
+export const User = mongoose.models.users ||  mongoose.model('User', userSchema)
