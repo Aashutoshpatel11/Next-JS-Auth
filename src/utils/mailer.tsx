@@ -2,11 +2,14 @@ import nodemailer from 'nodemailer'
 import {MailtrapTransport} from "mailtrap"
 import bcrypt from 'bcryptjs'
 import { User } from '@/models/user.model'
+import { log } from 'console'
 
 export const sendMail = async({email, emailType, userId}:any) => {
   try {
 
-    const hashedToken = await bcrypt.hash(userId, 10)
+    log("SEND MAIL UTIL CALLED :: ", email, emailType, userId);
+
+    const hashedToken = await bcrypt.hash(Date.now().toString(), 10)
 
     if( emailType === "VERIFY" ){
       const user = await User.findByIdAndUpdate(userId, {
@@ -30,7 +33,7 @@ export const sendMail = async({email, emailType, userId}:any) => {
 
     const sender = {
       address: "hello@demomailtrap.co",
-      name: "Mailtrap Test",
+      name: "NextJS Auth Mailtrap",
     };
 
     const mailOptions = {
@@ -41,6 +44,8 @@ export const sendMail = async({email, emailType, userId}:any) => {
     }
 
     const response = await transport.sendMail(mailOptions)
+
+    log('Mail sent successfully:: ', response);
 
     return response
     

@@ -3,22 +3,24 @@ import { User } from "@/models/user.model"
 import bcrypt from "bcryptjs";
 import { sendMail } from "@/utils/mailer";
 import { connectDB } from "@/dbConfig/dbConfig";
+import { log } from "console";
 
 connectDB()
 
 export async function POST(request: NextRequest){
     try {
-        const {email, username, password}:any = request.json()
+        const reqBody = request.json()
+        const {email, username, password} = await reqBody;
     
         const user = await User.findOne({
             $or: [{email}, {username}]
         })
     
         if(user){
-            throw NextResponse.json({
-                message: "user already exits",
-                status: 400
-            })
+            return NextResponse.json(
+                {error: "user already exits"},
+                {status: 400}
+            )
         }
     
         const salt = await bcrypt.genSalt(10);
@@ -29,10 +31,13 @@ export async function POST(request: NextRequest){
             username,
             password: hashedPassword
         })
-    
+        console.log("NEW USER :: ", newUser);
+        
         const savedUser = await newUser.save({validateBeforeSave: false})
+
+        console.log("SAVED USER :: ", savedUser);
     
-        sendMail({email, emailtype: "VERIFY", userId: savedUser._id})
+        sendMail({email, emailType: "VERIFY", userId: savedUser._id})
         
         return NextResponse.json({
             message: "New User Registered successfully",
