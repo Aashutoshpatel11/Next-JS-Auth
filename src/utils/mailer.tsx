@@ -14,12 +14,12 @@ export const sendMail = async({email, emailType, userId}:any) => {
     if( emailType === "VERIFY" ){
       const user = await User.findByIdAndUpdate(userId, {
         verifyToken: hashedToken,
-        verifyTokenExpiry: Date.now()+600000
+        verifyTokenExpiry: (Date.now()+600000).toString()
       })
     }else{
       const user = await User.findByIdAndUpdate(userId, {
         forgetPasswordToken: hashedToken,
-        forgetPasswordTokenExpiry: Date.now()+600000
+        forgetPasswordTokenExpiry: (Date.now()+600000).toString()
       })
     }
 

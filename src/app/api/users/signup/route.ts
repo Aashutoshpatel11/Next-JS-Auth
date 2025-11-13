@@ -9,8 +9,8 @@ connectDB()
 
 export async function POST(request: NextRequest){
     try {
-        const reqBody = request.json()
-        const {email, username, password} = await reqBody;
+        const reqBody = await request.json()
+        const {email, username, password} = reqBody;
     
         const user = await User.findOne({
             $or: [{email}, {username}]
