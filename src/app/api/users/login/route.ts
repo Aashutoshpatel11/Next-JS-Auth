@@ -51,15 +51,13 @@ export async function POST(request:NextRequest) {
     
         const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: '1d'} )
     
-        const response = NextResponse
-        .json(
+        const response = NextResponse.json(
             {message: "User Logged in successfully"},
             {status: 200}
         )
-        .cookies.set("token", token, {
+        response.cookies.set("token", token, {
             httpOnly: true
         })
-    
         return response
     } catch (error) {
         console.log("Error Occured while Logging In :: ",error);
