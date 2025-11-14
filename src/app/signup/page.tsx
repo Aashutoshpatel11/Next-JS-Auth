@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import toast, {Toaster} from 'react-hot-toast'
 
-const notify = () => toast.success('registering user...',{
+const notify = (data:string) => toast.success(data||'registering user...',{
     position: "top-right",
     style: {
         border: '1px solid #713200',
@@ -33,13 +33,13 @@ function signupPage() {
 
     const handleChange = async(e:any) => {
         e.preventDefault()
-        notify()
+        notify("registering user...")
         setLoading(true)
         console.log("user::", user);
         
         const response = await axios.post("/api/users/signup", user )
         console.log(response);
-        
+        notify(response?.data?.error || response?.data?.message)
         router.push('/login')
     }
 

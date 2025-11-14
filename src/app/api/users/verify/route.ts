@@ -7,6 +7,7 @@ connectDB()
 export async function POST(request:NextRequest) {
     try {
         const reqBody = await request.json()
+        console.log("REQBODY :: :: :: :: ", reqBody );
         const {token} = reqBody
 
         const user = await User.findOne({verifyToken: token})
