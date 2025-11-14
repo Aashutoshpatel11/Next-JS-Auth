@@ -3,6 +3,7 @@ import React, { useState , useEffect} from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
+import Link from 'next/link'
 
 function profilePage() {
     const[user, setUser] = useState({})
@@ -12,7 +13,6 @@ function profilePage() {
         try {
             const response = await axios.post('/api/users/logout')
             toast("logged Out",{position: "top-right"})
-            console.log("response:: :: :: ", response.data);
             router.push('/login')
         } catch (error:any) {
             throw new Error(error.message)
@@ -36,7 +36,7 @@ function profilePage() {
     >
         <Toaster/>
         <h2>PROFILE</h2>
-        <p className='mt-4' >email: {user? user.email : "Fetching" }</p>
+        <p className='mt-4' >email: <Link href={`/profile/${user.email}`} >{user? user.email : "Fetching" }</Link></p>
         <button type="button"
         onClick={fetchUser} 
         className='bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl mt-4 cursor-pointer'
