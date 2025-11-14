@@ -6,7 +6,8 @@ export async function POST() {
         .json(
             {message: "User Logged Out Successfully"},
             {status:200}
-        ).cookies.set("token", "", {
+        )
+        response.cookies.set("token", "", {
             httpOnly: true
         })
     
