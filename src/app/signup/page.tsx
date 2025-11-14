@@ -3,9 +3,16 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import toast, {Toaster} from 'react-hot-toast'
+
+const notify = () => toast.success('registering user...',{
+    position: "top-right",
+    style: {
+        border: '1px solid #713200',
+    },
+});
 
 function signupPage() {
-
     const [user, setUser] = useState({
         email: "",
         username: "",
@@ -26,16 +33,19 @@ function signupPage() {
 
     const handleChange = async(e:any) => {
         e.preventDefault()
+        notify()
         setLoading(true)
         console.log("user::", user);
         
         const response = await axios.post("/api/users/signup", user )
         console.log(response);
+        
         router.push('/login')
     }
 
   return (
     <div className='h-screen w-screen flex flex-col justify-between items-center pt-52 pb-10' >
+        <Toaster/>
         <div>
             <h3 className='text-center pb-6' >{loading? "Processing" : "Please Signup!" }</h3>
             <form 
